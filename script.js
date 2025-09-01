@@ -79,6 +79,11 @@ function addOrder() {
   renderOrders();
 }
 
+// 刪除餐點
+function deleteOrder(userName, itemName) {
+  const user = orders[userName];
+  if (!user) return;
+  
 // 顯示所有人的點餐紀錄
 function renderOrders() {
   const ordersDiv = document.getElementById("orders");
