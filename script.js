@@ -1,42 +1,94 @@
-// 餐廳對應的品項（要修改菜單就在這裡改）
+// 餐廳對應的品項與價格（要修改就在這裡改）
 const menus = {
-  a: ["排骨便當", "雞腿便當", "魚排便當"],
-  b: ["鍋貼", "水餃", "酸辣湯"],
-  c: ["牛肉麵", "陽春麵", "水餃湯"]
+  a: [
+    { name: "排骨便當", price: 90 },
+    { name: "雞腿便當", price: 100 },
+    { name: "魚排便當", price: 95 }
+  ],
+  b: [
+    { name: "鍋貼", price: 6 }, // 假設單顆 6 元
+    { name: "水餃", price: 6 },
+    { name: "酸辣湯", price: 40 }
+  ],
+  c: [
+    { name: "牛肉麵", price: 120 },
+    { name: "陽春麵", price: 50 },
+    { name: "水餃湯", price: 60 }
+  ]
 };
+
+// 存放所有人的點餐紀錄
+const orders = {};
 
 // 更新品項下拉選單
 function updateMenu() {
   const restaurant = document.getElementById("restaurantSelect").value;
   const menuSelect = document.getElementById("menuSelect");
 
-  // 先清空舊選項
   menuSelect.innerHTML = "";
 
   if (restaurant && menus[restaurant]) {
     menus[restaurant].forEach(item => {
       const option = document.createElement("option");
-      option.value = item;
-      option.textContent = item;
+      option.value = JSON.stringify(item); // 儲存品項與價格
+      option.textContent = `${item.name} - $${item.price}`;
       menuSelect.appendChild(option);
     });
   }
 }
 
-// 加入餐點並顯示在清單
+// 加入餐點
 function addOrder() {
   const name = document.getElementById("userName").value.trim();
   const restaurant = document.getElementById("restaurantSelect");
   const restaurantName = restaurant.options[restaurant.selectedIndex]?.text || "";
-  const item = document.getElementById("menuSelect").value;
+  const itemData = document.getElementById("menuSelect").value;
 
-  if (!name || !restaurantName || !item) {
+  if (!name || !restaurantName || !itemData) {
     alert("請輸入姓名並選擇餐廳和品項！");
     return;
   }
 
-  const orderList = document.getElementById("orderList");
-  const li = document.createElement("li");
-  li.textContent = `${name} 點了 ${restaurantName} 的 ${item}`;
-  orderList.appendChild(li);
+  const item = JSON.parse(itemData);
+
+  // 如果該人不存在，就建立他的紀錄
+  if (!orders[name]) {
+    orders[name] = {
+      items: [],
+      total: 0
+    };
+  }
+
+  // 檢查是否已經點過相同品項 → 數量 +1
+  const existingItem = orders[name].items.find(i => i.name === item.name);
+  if (existingItem) {
+    existingItem.qty += 1;
+    existingItem.subtotal = existingItem.qty * existingItem.price;
+  } else {
+    orders[name].items.push({
+      name: item.name,
+      price: item.price,
+      qty: 1,
+      subtotal: item.price
+    });
+  }
+
+  // 更新總金額
+  orders[name].total = orders[name].items.reduce((sum, i) => sum + i.subtotal, 0);
+
+  renderOrders();
 }
+
+// 顯示所有人的點餐紀錄
+function renderOrders() {
+  const ordersDiv = document.getElementById("orders");
+  ordersDiv.innerHTML = "";
+
+  for (const [name, data] of Object.entries(orders)) {
+    const personDiv = document.createElement("div");
+    personDiv.innerHTML = `<h4>${name} 的點餐 (總金額：$${data.total})</h4>`;
+    
+    const ul = document.createElement("ul");
+    data.items.forEach(i => {
+      const li = document.createElement("li");
+      li.textContent = `${i.name} x ${i.qty
