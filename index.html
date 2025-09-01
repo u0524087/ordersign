@@ -2,39 +2,39 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <title>點餐系統</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>多人點餐系統</title>
 </head>
 <body>
-  <h1>點餐系統</h1>
+  <h2>點餐系統</h2>
 
-  <div id="order-form">
-    <label>姓名：
-      <input type="text" id="userName" placeholder="請輸入姓名">
-    </label>
+  <label>姓名：
+    <input type="text" id="userName" placeholder="請輸入姓名">
+  </label>
 
-    <label>品項：
-      <select id="menuSelect"></select>
-    </label>
+  <br><br>
 
-    <button onclick="addOrder()">加入餐點</button>
-  </div>
+  <label>餐廳：
+    <select id="restaurantSelect" onchange="updateMenu()">
+      <option value="">請選擇餐廳</option>
+      <option value="a">A便當</option>
+      <option value="b">八方雲集</option>
+      <option value="c">黃媽媽麵食</option>
+    </select>
+  </label>
 
-  <h2>點餐清單</h2>
-  <table id="orderTable">
-    <thead>
-      <tr>
-        <th>姓名</th>
-        <th>品項</th>
-        <th>價格</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+  <br><br>
 
-  <h3 id="total">總計：0 元</h3>
+  <label>品項：
+    <select id="menuSelect"></select>
+  </label>
 
-  <button onclick="exportCSV()">匯出 CSV</button>
+  <br><br>
+
+  <button onclick="addOrder()">加入餐點</button>
+
+  <h3>點餐紀錄</h3>
+  <div id="orders"></div>
 
   <script src="script.js"></script>
 </body>
