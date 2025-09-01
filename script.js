@@ -1,94 +1,67 @@
-// 餐廳對應的品項與價格（要修改就在這裡改）
-const menus = {
-  a: [
-    { name: "排骨便當", price: 90 },
-    { name: "雞腿便當", price: 100 },
-    { name: "魚排便當", price: 95 }
-  ],
-  b: [
-    { name: "鍋貼", price: 6 }, // 假設單顆 6 元
-    { name: "水餃", price: 6 },
-    { name: "酸辣湯", price: 40 }
-  ],
-  c: [
-    { name: "牛肉麵", price: 120 },
-    { name: "陽春麵", price: 50 },
-    { name: "水餃湯", price: 60 }
-  ]
+// 預設八方雲集菜單 (示範品項，可自行增加)
+const menu = [
+  { name: "鍋貼(10顆)", price: 65 },
+  { name: "水餃(10顆)", price: 60 },
+  { name: "酸辣湯", price: 35 },
+  { name: "玉米濃湯", price: 30 },
+  { name: "紅茶(中)", price: 20 }
+];
+
+let orders = [];
+
+window.onload = function() {
+  const menuSelect = document.getElementById("menuSelect");
+  menu.forEach(item => {
+    const option = document.createElement("option");
+    option.value = item.name;
+    option.textContent = `${item.name} - $${item.price}`;
+    menuSelect.appendChild(option);
+  });
 };
 
-// 存放所有人的點餐紀錄
-const orders = {};
-
-// 更新品項下拉選單
-function updateMenu() {
-  const restaurant = document.getElementById("restaurantSelect").value;
-  const menuSelect = document.getElementById("menuSelect");
-
-  menuSelect.innerHTML = "";
-
-  if (restaurant && menus[restaurant]) {
-    menus[restaurant].forEach(item => {
-      const option = document.createElement("option");
-      option.value = JSON.stringify(item); // 儲存品項與價格
-      option.textContent = `${item.name} - $${item.price}`;
-      menuSelect.appendChild(option);
-    });
-  }
-}
-
-// 加入餐點
+// 加入點餐
 function addOrder() {
   const name = document.getElementById("userName").value.trim();
-  const restaurant = document.getElementById("restaurantSelect");
-  const restaurantName = restaurant.options[restaurant.selectedIndex]?.text || "";
-  const itemData = document.getElementById("menuSelect").value;
+  const selected = document.getElementById("menuSelect").value;
 
-  if (!name || !restaurantName || !itemData) {
-    alert("請輸入姓名並選擇餐廳和品項！");
+  if (!name) {
+    alert("請輸入姓名！");
     return;
   }
 
-  const item = JSON.parse(itemData);
+  const item = menu.find(i => i.name === selected);
+  orders.push({ name: name, item: item.name, price: item.price });
 
-  // 如果該人不存在，就建立他的紀錄
-  if (!orders[name]) {
-    orders[name] = {
-      items: [],
-      total: 0
-    };
-  }
-
-  // 檢查是否已經點過相同品項 → 數量 +1
-  const existingItem = orders[name].items.find(i => i.name === item.name);
-  if (existingItem) {
-    existingItem.qty += 1;
-    existingItem.subtotal = existingItem.qty * existingItem.price;
-  } else {
-    orders[name].items.push({
-      name: item.name,
-      price: item.price,
-      qty: 1,
-      subtotal: item.price
-    });
-  }
-
-  // 更新總金額
-  orders[name].total = orders[name].items.reduce((sum, i) => sum + i.subtotal, 0);
-
-  renderOrders();
+  renderTable();
 }
 
-// 顯示所有人的點餐紀錄
-function renderOrders() {
-  const ordersDiv = document.getElementById("orders");
-  ordersDiv.innerHTML = "";
+// 更新表格
+function renderTable() {
+  const tbody = document.querySelector("#orderTable tbody");
+  tbody.innerHTML = "";
 
-  for (const [name, data] of Object.entries(orders)) {
-    const personDiv = document.createElement("div");
-    personDiv.innerHTML = `<h4>${name} 的點餐 (總金額：$${data.total})</h4>`;
-    
-    const ul = document.createElement("ul");
-    data.items.forEach(i => {
-      const li = document.createElement("li");
-      li.textContent = `${i.name} x ${i.qty
+  let total = 0;
+  orders.forEach(order => {
+    const row = document.createElement("tr");
+    row.innerHTML = `<td>${order.name}</td><td>${order.item}</td><td>${order.price}</td>`;
+    tbody.appendChild(row);
+    total += order.price;
+  });
+
+  document.getElementById("total").textContent = `總計：${total} 元`;
+}
+
+// 匯出 CSV
+function exportCSV() {
+  let csvContent = "姓名,品項,價格\n";
+  orders.forEach(order => {
+    csvContent += `${order.name},${order.item},${order.price}\n`;
+  });
+
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.setAttribute("href", url);
+  link.setAttribute("download", "八方雲集點餐.csv");
+  link.click();
+}
