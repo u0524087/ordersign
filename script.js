@@ -104,3 +104,19 @@ function renderOrders() {
     ordersDiv.appendChild(personDiv);
   }
 }
+
+const API_URL = "https://script.google.com/macros/s/你的_API_網址/exec";
+
+function sendOrderToGoogleSheet(order) {
+  fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify(order)
+  })
+  .then(res => res.json())
+  .then(data => {
+    console.log("送出成功:", data);
+  })
+  .catch(err => {
+    console.error("送出失敗:", err);
+  });
+}
