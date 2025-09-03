@@ -53,7 +53,13 @@ function addOrder() {
     return;
   }
 
+  
+  // 自動抓取今日日期
+  const today = new Date();
+  const dateStr = today.toISOString().split("T")[0]; // 格式：YYYY-MM-DD
+
   const order = {
+    date: dateStr,   // 加上日期
     name: userName,
     restaurant: restaurantName,
     item: itemData.name,
