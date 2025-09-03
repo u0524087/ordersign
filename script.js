@@ -1,5 +1,5 @@
 // 這裡換成你自己的 Google Apps Script 網址
-const API_URL = "https://script.google.com/macros/s/AKfycbwRp3rl1WrVXOh7sSOGbBF2jJb7Yqnr_irXmUxzW_1wimxfLpNbfoIbWzcUAoHbjrUM/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxw2OwwoAmhCTygATfsZenvzenkUxPMplEGIVbCx7yr3uq8VrN8rsxoQX8kdVUTGqjP/exec";
 
 // 各餐廳品項與價格
 const menus = {
