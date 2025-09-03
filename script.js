@@ -1,4 +1,7 @@
-// 餐廳對應的品項與價格（要修改就在這裡改）
+// 這裡換成你自己的 Google Apps Script 網址
+const API_URL = "https://script.google.com/macros/s/你的_API_網址/exec";
+
+// 各餐廳品項與價格
 const menus = {
   a: [
     { name: "排骨便當", price: 90 },
@@ -6,114 +9,80 @@ const menus = {
     { name: "魚排便當", price: 95 }
   ],
   b: [
-    { name: "鍋貼", price: 6 }, // 假設單顆 6 元
-    { name: "水餃", price: 6 },
+    { name: "鍋貼", price: 60 },
+    { name: "水餃", price: 70 },
     { name: "酸辣湯", price: 40 }
   ],
   c: [
     { name: "牛肉麵", price: 120 },
-    { name: "陽春麵", price: 50 },
-    { name: "水餃湯", price: 60 }
+    { name: "陽春麵", price: 60 },
+    { name: "水餃湯", price: 65 }
   ]
 };
 
-// 存放所有人的點餐紀錄
-const orders = {};
-
-// 更新品項下拉選單
+// 更新餐點選單
 function updateMenu() {
   const restaurant = document.getElementById("restaurantSelect").value;
   const menuSelect = document.getElementById("menuSelect");
-
   menuSelect.innerHTML = "";
 
   if (restaurant && menus[restaurant]) {
     menus[restaurant].forEach(item => {
       const option = document.createElement("option");
-      option.value = JSON.stringify(item); // 儲存品項與價格
+      option.value = JSON.stringify(item); // 帶入品項與價格
       option.textContent = `${item.name} - $${item.price}`;
       menuSelect.appendChild(option);
     });
   }
 }
 
+// 點餐資料
+let orderList = [];
+let totalPrice = 0;
+
 // 加入餐點
 function addOrder() {
-  const name = document.getElementById("userName").value.trim();
-  const restaurant = document.getElementById("restaurantSelect");
-  const restaurantName = restaurant.options[restaurant.selectedIndex]?.text || "";
-  const itemData = document.getElementById("menuSelect").value;
+  const userName = document.getElementById("userName").value.trim();
+  const restaurantSelect = document.getElementById("restaurantSelect");
+  const restaurantName = restaurantSelect.options[restaurantSelect.selectedIndex].text;
+  const menuSelect = document.getElementById("menuSelect");
+  const itemData = JSON.parse(menuSelect.value);
 
-sendOrderToGoogleSheet({
-  name: userName,
-  restaurant: restaurant,
-  item: item,
-  price: price
-});
-
-  if (!name || !restaurantName || !itemData) {
-    alert("請輸入姓名並選擇餐廳和品項！");
+  if (!userName || !restaurantName || !itemData) {
+    alert("請輸入姓名並選擇餐廳和餐點！");
     return;
   }
 
-  const item = JSON.parse(itemData);
+  const order = {
+    name: userName,
+    restaurant: restaurantName,
+    item: itemData.name,
+    price: itemData.price
+  };
 
-  // 如果該人不存在，就建立他的紀錄
-  if (!orders[name]) {
-    orders[name] = {
-      items: [],
-      total: 0
-    };
-  }
+  orderList.push(order);
+  totalPrice += order.price;
 
-  // 檢查是否已經點過相同品項 → 數量 +1
-  const existingItem = orders[name].items.find(i => i.name === item.name);
-  if (existingItem) {
-    existingItem.qty += 1;
-    existingItem.subtotal = existingItem.qty * existingItem.price;
-  } else {
-    orders[name].items.push({
-      name: item.name,
-      price: item.price,
-      qty: 1,
-      subtotal: item.price
-    });
-  }
-
-  // 更新總金額
-  orders[name].total = orders[name].items.reduce((sum, i) => sum + i.subtotal, 0);
-
-  renderOrders();
+  displayOrders();
+  sendOrderToGoogleSheet(order);
 }
 
-// 刪除餐點
-function deleteOrder(userName, itemName) {
-  const user = orders[userName];
-  if (!user) return;
-  
-// 顯示所有人的點餐紀錄
-function renderOrders() {
+// 顯示目前的點餐紀錄
+function displayOrders() {
   const ordersDiv = document.getElementById("orders");
   ordersDiv.innerHTML = "";
 
-  for (const [name, data] of Object.entries(orders)) {
-    const personDiv = document.createElement("div");
-    personDiv.innerHTML = `<h4>${name} 的點餐 (總金額：$${data.total})</h4>`;
-    
-    const ul = document.createElement("ul");
-    data.items.forEach(i => {
-      const li = document.createElement("li");
-      li.textContent = `${i.name} x ${i.qty} = $${i.subtotal}`;
-      ul.appendChild(li);
-    });
+  orderList.forEach(o => {
+    const div = document.createElement("div");
+    div.className = "order-item";
+    div.textContent = `${o.name} 點了 ${o.restaurant} 的 ${o.item} - $${o.price}`;
+    ordersDiv.appendChild(div);
+  });
 
-    personDiv.appendChild(ul);
-    ordersDiv.appendChild(personDiv);
-  }
+  document.getElementById("total").textContent = totalPrice;
 }
 
-const API_URL = "https://script.google.com/macros/s/AKfycbwRp3rl1WrVXOh7sSOGbBF2jJb7Yqnr_irXmUxzW_1wimxfLpNbfoIbWzcUAoHbjrUM/exec";
-
+// 傳送資料到 Google Sheet
 function sendOrderToGoogleSheet(order) {
   fetch(API_URL, {
     method: "POST",
