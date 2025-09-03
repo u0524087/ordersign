@@ -2,17 +2,36 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>多人點餐系統</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    select, input, button {
+      margin-top: 5px;
+      padding: 5px;
+    }
+    #orderList {
+      margin-top: 20px;
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+    .order-item {
+      margin-bottom: 5px;
+    }
+  </style>
 </head>
 <body>
-  <h2>點餐系統</h2>
+  <h2>多人點餐系統</h2>
 
   <label>姓名：
     <input type="text" id="userName" placeholder="請輸入姓名">
   </label>
-
-  <br><br>
 
   <label>餐廳：
     <select id="restaurantSelect" onchange="updateMenu()">
@@ -23,38 +42,18 @@
     </select>
   </label>
 
-  <br><br>
-
-  <label>品項：
+  <label>餐點：
     <select id="menuSelect"></select>
   </label>
 
-  <br><br>
-
   <button onclick="addOrder()">加入餐點</button>
 
-  <h3>點餐紀錄</h3>
-  <div id="orders"></div>
+  <div id="orderList">
+    <h3>點餐紀錄</h3>
+    <div id="orders"></div>
+    <p><strong>總金額：<span id="total">0</span> 元</strong></p>
+  </div>
 
   <script src="script.js"></script>
 </body>
 </html>
-
-
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js"></script>
-<script>
-  // 你的 Firebase 設定
-  const firebaseConfig = {
-    apiKey: "你的-API-Key",
-    authDomain: "你的專案.firebaseapp.com",
-    projectId: "你的專案ID",
-    storageBucket: "你的專案.appspot.com",
-    messagingSenderId: "你的SenderID",
-    appId: "你的AppID"
-  };
-
-  // 初始化 Firebase
-  const app = firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-</script>
