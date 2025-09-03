@@ -44,6 +44,13 @@ function addOrder() {
   const restaurantName = restaurant.options[restaurant.selectedIndex]?.text || "";
   const itemData = document.getElementById("menuSelect").value;
 
+sendOrderToGoogleSheet({
+  name: userName,
+  restaurant: restaurant,
+  item: item,
+  price: price
+});
+
   if (!name || !restaurantName || !itemData) {
     alert("請輸入姓名並選擇餐廳和品項！");
     return;
@@ -105,7 +112,7 @@ function renderOrders() {
   }
 }
 
-const API_URL = "https://script.google.com/macros/s/你的_API_網址/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwRp3rl1WrVXOh7sSOGbBF2jJb7Yqnr_irXmUxzW_1wimxfLpNbfoIbWzcUAoHbjrUM/exec";
 
 function sendOrderToGoogleSheet(order) {
   fetch(API_URL, {
