@@ -1,7 +1,7 @@
-// 這裡換成你自己的 Google Apps Script 網址
+// === Google Apps Script 網址 ===
 const API_URL = "https://script.google.com/macros/s/AKfycbzv16gZdrIgUWt-gO2nVFsNK_MMSjmN2JdnmCIZxM-PrXwXCSnm7SeOsCT0SK21c6wz/exec";
 
-// 各餐廳品項與價格
+// === 餐廳與品項 ===
 const menus = {
   a: [
     { name: "排骨便當", price: 90 },
@@ -20,77 +20,40 @@ const menus = {
   ]
 };
 
-// 更新餐點選單
+// === 點餐資料 ===
+let orderList = [];
+
+// === 更新餐點選項 ===
 function updateMenu() {
   const restaurant = document.getElementById("restaurantSelect").value;
   const menuSelect = document.getElementById("menuSelect");
   menuSelect.innerHTML = "";
 
-  if (restaurant && menus[restaurant]) {
-    menus[restaurant].forEach(item => {
-      const option = document.createElement("option");
-      option.value = JSON.stringify(item); // 帶入品項與價格
-      option.textContent = `${item.name} - $${item.price}`;
-      menuSelect.appendChild(option);
-    });
-  }
+  menus[restaurant].forEach(item => {
+    const opt = document.createElement("option");
+    opt.value = JSON.stringify(item);
+    opt.textContent = `${item.name} - $${item.price}`;
+    menuSelect.appendChild(opt);
+  });
 }
 
-// 點餐資料
-let orderList = [];
-let totalPrice = 0;
-
-// 加入餐點
+// === 加入餐點 ===
 function addOrder() {
   const userName = document.getElementById("userName").value.trim();
-  const restaurantSelect = document.getElementById("restaurantSelect");
-  const restaurantName = restaurantSelect.options[restaurantSelect.selectedIndex].text;
-  const menuSelect = document.getElementById("menuSelect");
-  const itemData = JSON.parse(menuSelect.value);
+  const restaurantCode = document.getElementById("restaurantSelect").value;
+  const restaurantName = document.getElementById("restaurantSelect").selectedOptions[0].text;
+  const itemData = JSON.parse(document.getElementById("menuSelect").value);
 
-  if (!userName || !restaurantName || !itemData) {
-    alert("請輸入姓名並選擇餐廳和餐點！");
+  if (!userName) {
+    alert("請輸入姓名");
     return;
   }
-  
-// 刪除點餐
-function deleteOrder(index) {
-  orders.splice(index, 1);
-  updateOrderList();
-}
 
-// 更新清單顯示
-function updateOrderList() {
-  const orderList = document.getElementById("orderList");
-  const totalAmount = document.getElementById("totalAmount");
-
-  orderList.innerHTML = "";
-  let total = 0;
-
-  orders.forEach((order, index) => {
-    total += order.price;
-    const li = document.createElement("li");
-    li.textContent = `${order.name} 點了 ${order.restaurant} 的 ${order.menuItem} - $${order.price}`;
-
-    // 加入刪除按鈕
-    const delBtn = document.createElement("button");
-    delBtn.textContent = "刪除";
-    delBtn.style.marginLeft = "10px";
-    delBtn.onclick = () => deleteOrder(index);
-    li.appendChild(delBtn);
-
-    orderList.appendChild(li);
-  });
-
-  totalAmount.textContent = `總金額：${total} 元`;
-}
-  
-  // 自動抓取今日日期
-  const today = new Date();
-  const dateStr = today.toISOString().split("T")[0]; // 格式：YYYY-MM-DD
+  // 今日日期
+  const today = new Date().toISOString().split("T")[0];
 
   const order = {
-    date: dateStr,   // 加上日期
+    date: today,
     name: userName,
     restaurant: restaurantName,
     item: itemData.name,
@@ -98,38 +61,49 @@ function updateOrderList() {
   };
 
   orderList.push(order);
-  totalPrice += order.price;
-
   displayOrders();
   sendOrderToGoogleSheet(order);
 }
 
-// 顯示目前的點餐紀錄
+// === 顯示點餐清單 ===
 function displayOrders() {
   const ordersDiv = document.getElementById("orders");
   ordersDiv.innerHTML = "";
 
-  orderList.forEach(o => {
+  let total = 0;
+
+  orderList.forEach((o, index) => {
+    total += o.price;
+
     const div = document.createElement("div");
-    div.className = "order-item";
     div.textContent = `${o.name} 點了 ${o.restaurant} 的 ${o.item} - $${o.price}`;
+
+    // 刪除按鈕
+    const btn = document.createElement("button");
+    btn.textContent = "刪除";
+    btn.style.marginLeft = "10px";
+    btn.onclick = () => deleteOrder(index);
+
+    div.appendChild(btn);
     ordersDiv.appendChild(div);
   });
 
-  document.getElementById("total").textContent = totalPrice;
+  document.getElementById("total").textContent = total;
 }
 
-// 傳送資料到 Google Sheet
+// === 刪除 ===
+function deleteOrder(index) {
+  orderList.splice(index, 1);
+  displayOrders();
+}
+
+// === 傳送到 Google Sheet ===
 function sendOrderToGoogleSheet(order) {
   fetch(API_URL, {
     method: "POST",
     body: JSON.stringify(order)
   })
-  .then(res => res.json())
-  .then(data => {
-    console.log("送出成功:", data);
-  })
-  .catch(err => {
-    console.error("送出失敗:", err);
-  });
+    .then(res => res.json())
+    .then(data => console.log("成功", data))
+    .catch(err => console.error("失敗", err));
 }
