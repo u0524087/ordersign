@@ -52,7 +52,38 @@ function addOrder() {
     alert("請輸入姓名並選擇餐廳和餐點！");
     return;
   }
+  
+// 刪除點餐
+function deleteOrder(index) {
+  orders.splice(index, 1);
+  updateOrderList();
+}
 
+// 更新清單顯示
+function updateOrderList() {
+  const orderList = document.getElementById("orderList");
+  const totalAmount = document.getElementById("totalAmount");
+
+  orderList.innerHTML = "";
+  let total = 0;
+
+  orders.forEach((order, index) => {
+    total += order.price;
+    const li = document.createElement("li");
+    li.textContent = `${order.name} 點了 ${order.restaurant} 的 ${order.menuItem} - $${order.price}`;
+
+    // 加入刪除按鈕
+    const delBtn = document.createElement("button");
+    delBtn.textContent = "刪除";
+    delBtn.style.marginLeft = "10px";
+    delBtn.onclick = () => deleteOrder(index);
+    li.appendChild(delBtn);
+
+    orderList.appendChild(li);
+  });
+
+  totalAmount.textContent = `總金額：${total} 元`;
+}
   
   // 自動抓取今日日期
   const today = new Date();
