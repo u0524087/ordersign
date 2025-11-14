@@ -22,12 +22,19 @@
       padding: 10px;
     }
     .order-item {
-      margin-bottom: 5px;
+      margin-bottom: 10px;
+    }
+    .delete-btn {
+      margin-left: 10px;
+      padding: 2px 5px;
     }
   </style>
 </head>
 <body>
   <h2>多人點餐系統</h2>
+
+  <!-- 顯示今日日期（前端自動填入） -->
+  <p><strong>今日日期：<span id="today"></span></strong></p>
 
   <label>姓名：
     <input type="text" id="userName" placeholder="請輸入姓名">
@@ -50,7 +57,10 @@
 
   <div id="orderList">
     <h3>點餐紀錄</h3>
+
+    <!-- 這裡 JS 會把每筆訂單塞進來 -->
     <div id="orders"></div>
+
     <p><strong>總金額：<span id="total">0</span> 元</strong></p>
   </div>
 
