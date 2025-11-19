@@ -93,6 +93,9 @@ function addOrder() {
     return;
   }
 
+    }
+
+
 // === 顯示點餐清單 ===
 function displayOrders() {
   const ordersDiv = document.getElementById("orders");
@@ -106,32 +109,7 @@ function displayOrders() {
     const div = document.createElement("div");
     div.textContent = `${o.name} 點了 ${o.restaurant} 的 ${o.item} - $${o.price}`;
 
-    // 刪除按鈕
-    const btn = document.createElement("button");
-    btn.textContent = "刪除";
-    btn.style.marginLeft = "10px";
-    btn.onclick = () => deleteOrder(index);
+  }
+                    }
 
-    div.appendChild(btn);
-    ordersDiv.appendChild(div);
-  });
-
-  document.getElementById("total").textContent = total;
-}
-
-// === 刪除 ===
-function deleteOrder(index) {
-  orderList.splice(index, 1);
-  displayOrders();
-}
-
-// === 傳送到 Google Sheet ===
-function sendOrderToGoogleSheet(order) {
-  fetch(API_URL, {
-    method: "POST",
-    body: JSON.stringify(order)
-  })
-    .then(res => res.json())
-    .then(data => console.log("成功", data))
-    .catch(err => console.error("失敗", err));
-}
+    
