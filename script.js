@@ -41,10 +41,6 @@ const menus = {
     { name: "滷肉乾麵(大)", price: 55 },
     { name: "古早味乾麵(小)", price: 40 },
     { name: "古早味乾麵(大)", price: 55 },
-    { name: "沙茶羊肉(份)", price: 80 },
-    { name: "沙茶豬肉(份)", price: 80 },
-    { name: "嘴邊肉(份)", price: 50 },
-    { name: "肝蓮(份)", price: 45 },
     { name: "皮蛋豆腐(份)", price: 45 },
     { name: "高麗菜(份)", price: 40 },
     { name: "大陸妹(份)", price: 40 },
@@ -55,7 +51,6 @@ const menus = {
     { name: "海帶(份)", price: 15 },
     { name: "小菜拼盤", price: 100 },
     { name: "小菜拼盤(大)", price: 150 },
-
   ]
 };
 
