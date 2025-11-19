@@ -88,11 +88,11 @@ const menus = {
 // === 點餐資料 ===
 let orderList = [];
 
-// === 更新餐點選項 ===
 function updateMenu() {
   const restaurant = document.getElementById("restaurantSelect").value;
   const menuSelect = document.getElementById("menuSelect");
   menuSelect.innerHTML = "";
+  if (!restaurant || !menus[restaurant]) return;
 
   menus[restaurant].forEach(item => {
     const opt = document.createElement("option");
@@ -102,12 +102,12 @@ function updateMenu() {
   });
 }
 
-// === 加入餐點 ===
 function addOrder() {
   const userName = document.getElementById("userName").value.trim();
   const restaurantCode = document.getElementById("restaurantSelect").value;
   const restaurantName = document.getElementById("restaurantSelect").selectedOptions[0].text;
   const itemData = JSON.parse(document.getElementById("menuSelect").value);
+  const qty = parseInt(document.getElementById("menuQty").value, 10);
 
   if (!userName) {
     alert("請輸入姓名");
@@ -125,8 +125,6 @@ function addOrder() {
     alert("數量需大於0");
     return;
   }
-
-  // 加入訂單，將數量和小計金額都存入
   orderList.push({
     name: userName,
     restaurant: restaurantName,
@@ -135,48 +133,5 @@ function addOrder() {
     unitPrice: itemData.price,
     qty: qty
   });
-
   displayOrders();
 }
-
-function displayOrders() {
-  const ordersDiv = document.getElementById("orders");
-  ordersDiv.innerHTML = "";
-
-  let total = 0;
-
-  orderList.forEach((o, index) => {
-    total += o.price;
-    const div = document.createElement("div");
-    div.textContent = `${o.name} 點了 ${o.restaurant} 的 ${o.item} (${o.unitPrice}元/份) × ${o.qty} 份 — $${o.price}`;
-    const btn = document.createElement("button");
-    btn.textContent = "刪除";
-    btn.className = "delete-btn";
-    btn.onclick = () => deleteOrder(index);
-    div.appendChild(btn);
-    div.className = "order-item";
-    ordersDiv.appendChild(div);
-  });
-
-  document.getElementById("total").textContent = total;
-}
-  
-
-    }
-
-
-// === 顯示點餐清單 ===
-function displayOrders() {
-  const ordersDiv = document.getElementById("orders");
-  ordersDiv.innerHTML = "";
-
-  let total = 0;
-
-  orderList.forEach((o, index) => {
-    total += o.price;
-
-    const div = document.createElement("div");
-    div.textContent = `${o.name} 點了 ${o.restaurant} 的 ${o.item} - $${o.price}`;}
-   }
-
-    
