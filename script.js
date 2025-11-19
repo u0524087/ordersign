@@ -20,15 +20,11 @@ const menus = {
   ]
 };
 
-// === 點餐資料 ===
-let orderList = [];
-
 function updateMenu() {
   const restaurant = document.getElementById("restaurantSelect").value;
   const menuSelect = document.getElementById("menuSelect");
   menuSelect.innerHTML = "";
   if (!restaurant || !menus[restaurant]) return;
-
   menus[restaurant].forEach(item => {
     const opt = document.createElement("option");
     opt.value = JSON.stringify(item);
