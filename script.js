@@ -107,9 +107,7 @@ function displayOrders() {
     total += o.price;
 
     const div = document.createElement("div");
-    div.textContent = `${o.name} 點了 ${o.restaurant} 的 ${o.item} - $${o.price}`;
-
-  }
-                    }
+    div.textContent = `${o.name} 點了 ${o.restaurant} 的 ${o.item} - $${o.price}`;}
+   }
 
     
