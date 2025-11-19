@@ -113,6 +113,54 @@ function addOrder() {
     alert("請輸入姓名");
     return;
   }
+  if (!restaurantCode) {
+    alert("請選擇餐廳");
+    return;
+  }
+  if (!itemData) {
+    alert("請選擇餐點");
+    return;
+  }
+  if (!qty || qty < 1) {
+    alert("數量需大於0");
+    return;
+  }
+
+  // 加入訂單，將數量和小計金額都存入
+  orderList.push({
+    name: userName,
+    restaurant: restaurantName,
+    item: itemData.name,
+    price: itemData.price * qty,
+    unitPrice: itemData.price,
+    qty: qty
+  });
+
+  displayOrders();
+}
+
+function displayOrders() {
+  const ordersDiv = document.getElementById("orders");
+  ordersDiv.innerHTML = "";
+
+  let total = 0;
+
+  orderList.forEach((o, index) => {
+    total += o.price;
+    const div = document.createElement("div");
+    div.textContent = `${o.name} 點了 ${o.restaurant} 的 ${o.item} (${o.unitPrice}元/份) × ${o.qty} 份 — $${o.price}`;
+    const btn = document.createElement("button");
+    btn.textContent = "刪除";
+    btn.className = "delete-btn";
+    btn.onclick = () => deleteOrder(index);
+    div.appendChild(btn);
+    div.className = "order-item";
+    ordersDiv.appendChild(div);
+  });
+
+  document.getElementById("total").textContent = total;
+}
+  
 
     }
 
