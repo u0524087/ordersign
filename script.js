@@ -98,17 +98,6 @@ function addOrder() {
     return;
   }
 
-  // 自動顯示今日日期
-function showTodayDate() {
-  const today = new Date();
-  const dateStr = today.toISOString().split("T")[0]; // YYYY-MM-DD
-  document.getElementById("todayDate").textContent = dateStr;
-}
-
-// 網頁載入後立即執行
-window.onload = function () {
-  showTodayDate();
-};
 
 // === 顯示點餐清單 ===
 function displayOrders() {
