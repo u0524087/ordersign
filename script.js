@@ -56,16 +56,6 @@ const menus = {
     { name: "小菜拼盤", price: 100 },
     { name: "小菜拼盤(大)", price: 150 },
 
-  ],
-  b: [
-    { name: "鍋貼", price: 60 },
-    { name: "水餃", price: 70 },
-    { name: "酸辣湯", price: 40 }
-  ],
-  c: [
-    { name: "牛肉麵", price: 120 },
-    { name: "陽春麵", price: 60 },
-    { name: "水餃湯", price: 65 }
   ]
 };
 
@@ -97,7 +87,6 @@ function addOrder() {
     alert("請輸入姓名");
     return;
   }
-
 
 // === 顯示點餐清單 ===
 function displayOrders() {
