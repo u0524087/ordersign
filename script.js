@@ -61,40 +61,53 @@ function addOrder() {
     alert("數量需大於0");
     return;
   }
-  orderList.push({
+  // 建立 order 物件（這是要送到 Google Sheet 的）
+  const order = {
+    date: new Date().toISOString().split("T")[0],
     name: userName,
     restaurant: restaurantName,
     item: itemData.name,
-    price: itemData.price * qty,
     unitPrice: itemData.price,
-    qty: qty
-  });
+    qty: qty,
+    price: itemData.price * qty,
+    note: note
+  };
 
+  // 加入本地清單
+  orderList.push(order);
+
+  // 更新畫面
+  displayOrders();
+
+  // 送到 Google Sheet
+  sendOrderToGoogleSheet(order);
+}
+
+// === 顯示畫面 ===
 function displayOrders() {
   const ordersDiv = document.getElementById("orders");
   ordersDiv.innerHTML = "";
 
   let total = 0;
+
   orderList.forEach((o, index) => {
     total += o.price;
+
     const div = document.createElement("div");
-    div.textContent = `${o.name} 點了 ${o.restaurant} 的 ${o.item} (${o.unitPrice}元/份) × ${o.qty} — $${o.price}`;
+    div.textContent = `${o.name} 點了 ${o.restaurant} 的 ${o.item} (${o.unitPrice} 元/份) × ${o.qty} = $${o.price}`;
     ordersDiv.appendChild(div);
   });
+
   document.getElementById("total").textContent = total;
 }
 
-   // 送出到 Google Sheet
-  sendOrderToGoogleSheet(order);
-}
-
+// === 傳送資料到 Google Sheets ===
 function sendOrderToGoogleSheet(order) {
   fetch(API_URL, {
     method: "POST",
     body: JSON.stringify(order)
   })
   .then(res => res.json())
-  .then(data => console.log("成功", data))
-  .catch(err => console.error("失敗", err));
+  .then(data => console.log("成功送出：", data))
+  .catch(err => console.error("送出失敗：", err));
 }
-
