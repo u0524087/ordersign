@@ -1,6 +1,8 @@
 // === Google Apps Script 網址 ===
 const API_URL = "https://script.google.com/macros/s/AKfycby0I5b6-mLOwyl2zrqkCKCMMucBufCYMbksfN-OC4X-qW2EXSP72VMTFN4hS0KSJgw/exec";
 
+
+
 // === 餐廳與品項 ===
 const menus = {
   a: [
@@ -19,6 +21,8 @@ const menus = {
     { name: "水餃湯", price: 65 }
   ]
 };
+
+let orderList = [];
 
 function updateMenu() {
   const restaurant = document.getElementById("restaurantSelect").value;
@@ -39,7 +43,8 @@ function addOrder() {
   const restaurantName = document.getElementById("restaurantSelect").selectedOptions[0].text;
   const itemData = JSON.parse(document.getElementById("menuSelect").value);
   const qty = parseInt(document.getElementById("menuQty").value, 10);
-
+  const note = document.getElementById("note").value.trim();
+  
   if (!userName) {
     alert("請輸入姓名");
     return;
@@ -64,7 +69,20 @@ function addOrder() {
     unitPrice: itemData.price,
     qty: qty
   });
-  displayOrders();
+
+  function displayOrders() {
+  const ordersDiv = document.getElementById("orders");
+  ordersDiv.innerHTML = "";
+
+  let total = 0;
+  orderList.forEach((o, index) => {
+    total += o.price;
+    const div = document.createElement("div");
+    div.textContent = `${o.name} 點了 ${o.restaurant} 的 ${o.item} (${o.unitPrice}元/份) × ${o.qty} — $${o.price}`;
+    ordersDiv.appendChild(div);
+  });
+  document.getElementById("total").textContent = total;
+}
 
    // 送出到 Google Sheet
   sendOrderToGoogleSheet(order);
