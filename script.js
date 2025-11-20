@@ -65,4 +65,18 @@ function addOrder() {
     qty: qty
   });
   displayOrders();
+
+   // 送出到 Google Sheet
+  sendOrderToGoogleSheet(order);
 }
+
+function sendOrderToGoogleSheet(order) {
+  fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify(order)
+  })
+  .then(res => res.json())
+  .then(data => console.log("成功", data))
+  .catch(err => console.error("失敗", err));
+}
+
