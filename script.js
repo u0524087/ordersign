@@ -105,7 +105,7 @@ function displayOrders() {
 function sendOrderToGoogleSheet(order) {
   fetch(API_URL, {
     method: "POST",
-    headers: { "Content-Type": "text/plain" },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(order)
   })
   .then(res => res.json())
