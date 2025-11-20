@@ -1,5 +1,5 @@
 // === Google Apps Script 網址 ===
-const API_URL = "https://script.google.com/macros/s/AKfycbx3x5zatosVWI8vgm3iNHY2zPCgmhhiT9bLT4Vvq1nVQYN_LOKkBnVi5Ejsjr5inXj5/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbybT7HEzLVdzbTB6Yejh9QdeKQyvsCJ_VSbI4YzPYSAwKI3uBoryemioyTzeWj8RsPb/exec";
 
 
 
