@@ -1,5 +1,5 @@
 // === Google Apps Script 網址 ===
-const API_URL = "https://script.google.com/macros/s/AKfycbyHonwWMb7UdbiX3qpyX-_UjWBJcr3pOw6waH3cDl6yulP9TBUsYbVYhKIlnWebTTcxcg/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwgNJoY6uZo-zLjBqtKFKmVtzecPTyEq1pEsYtHcUBdw3LBDEEw2jVWbATHvgIIM2DylQ/exec";
 
 // === 餐廳與品項 ===
 const menus = {
