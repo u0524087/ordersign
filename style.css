@@ -1,34 +1,28 @@
 body {
-  font-family: Arial, sans-serif;
-  padding: 20px;
+    font-family: 'Noto Sans TC', sans-serif;
+    background: rgba(255, 255, 255, 0.7); /* 背景透明度 70% */
 }
 
-h1, h2, h3 {
-  text-align: center;
+.container {
+    background: rgba(255, 255, 255, 0.7);
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 5px 5px 0px #000; /* 手繪粗線條感 */
 }
 
-#order-form {
-  margin: 20px 0;
-  text-align: center;
+input, button, .table, .table th, .table td {
+    border-radius: 12px !important; /* 所有欄位圓角 */
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 15px;
-}
-
-table, th, td {
-  border: 1px solid #aaa;
-}
-
-th, td {
-  padding: 8px;
-  text-align: center;
+h1, label, button {
+    font-family: 'cwTeXYen', 'Noto Sans TC', sans-serif; /* 粗體夜市手寫感 */
+    font-weight: 700;
 }
 
 button {
-  margin-top: 10px;
-  padding: 6px 12px;
-  cursor: pointer;
+    background: #ffdd57;
+    border: 3px solid #222;
+    padding: 10px 15px;
+    border-radius: 15px;
+    box-shadow: 4px 4px 0px #000;
 }
