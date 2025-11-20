@@ -70,7 +70,7 @@ function addOrder() {
     qty: qty
   });
 
-  function displayOrders() {
+function displayOrders() {
   const ordersDiv = document.getElementById("orders");
   ordersDiv.innerHTML = "";
 
