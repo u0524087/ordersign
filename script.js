@@ -100,13 +100,15 @@ function displayOrders() {
 }
 
 // === 傳送資料到 Google Sheets ===
-function sendOrderToGoogleSheet(order) {
+  // 送到 Google Apps Script
   fetch(API_URL, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(order)
+    contentType: "application/json",
+    body: JSON.stringify(orderData)
   })
-  .then(res => res.json())
-  .then(data => console.log("成功送出：", data))
-  .catch(err => console.error("送出失敗：", err));
+    .then(res => res.json())
+    .then(response => {
+      console.log("送出成功：", response);
+    })
+    .catch(err => console.error("送出失敗：", err));
 }
