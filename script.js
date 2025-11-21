@@ -101,13 +101,12 @@ function displayOrders() {
 
 // === 傳送資料到 Google Sheets ===
   // 送到 Google Apps Script
+ function sendOrderToGoogleSheet(order) {
   fetch(API_URL, {
     method: "POST",
-    contentType: "application/json",
-    body: JSON.stringify(orderData)
+    body: JSON.stringify(order)   // ← 不要加 headers，因為 Apps Script 才不會 CORS
   })
-    .then(res => res.json())
-    .then(response => {
-      console.log("送出成功：", response);
-    })
-    .catch(err => console.error("送出失敗：", err));
+  .then(res => res.json())
+  .then(data => console.log("成功送出：", data))
+  .catch(err => console.error("送出失敗：", err));
+}
