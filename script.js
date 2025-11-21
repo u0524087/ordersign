@@ -1,5 +1,5 @@
 // === Google Apps Script 網址 ===
-const API_URL = "https://script.google.com/macros/s/AKfycbzrouUJkJ4SbaHoDiqCrxVMO23wqsbKY6nxb_A4Jc2xpuMj3VhLnFjpC_39w9M81DpXMg/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzNtjl5csR4wNanPoUIQXgXZss0kGhG3AW4wygTVII0uEWRPCP8lrbyTxTEY14-MD7AJw/exec";
 
 // === 餐廳與品項 ===
 const menus = {
@@ -100,11 +100,23 @@ function displayOrders() {
 }
 
 // === 傳送資料到 Google Sheets ===
-  // 送到 Google Apps Script
- function sendOrderToGoogleSheet(order) {
+function sendOrderToGoogleSheet(order) {
+
+  // ★ 必須先建立 formData（你之前缺這段，JS 才會噴錯）
+  const formData = new URLSearchParams();
+
+  formData.append("date", order.date);
+  formData.append("name", order.name);
+  formData.append("restaurant", order.restaurant);
+  formData.append("item", order.item);
+  formData.append("unitPrice", order.unitPrice);
+  formData.append("qty", order.qty);
+  formData.append("price", order.price);
+  formData.append("note", order.note);
+
   fetch(API_URL, {
     method: "POST",
-    body: formData      // ⭐ 不用 headers，不用 JSON   
+    body: formData   // ⭐ 用 formData，不用 headers，不用 JSON
   })
   .then(res => res.text())
   .then(msg => console.log("成功送出：", msg))
