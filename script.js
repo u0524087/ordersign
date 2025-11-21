@@ -111,4 +111,3 @@ function displayOrders() {
       console.log("送出成功：", response);
     })
     .catch(err => console.error("送出失敗：", err));
-}
