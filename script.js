@@ -1,5 +1,5 @@
 // === Google Apps Script 網址 ===
-const API_URL = "https://script.google.com/macros/s/AKfycbzNtjl5csR4wNanPoUIQXgXZss0kGhG3AW4wygTVII0uEWRPCP8lrbyTxTEY14-MD7AJw/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzrouUJkJ4SbaHoDiqCrxVMO23wqsbKY6nxb_A4Jc2xpuMj3VhLnFjpC_39w9M81DpXMg/exec";
 
 // === 餐廳與品項 ===
 const menus = {
@@ -116,7 +116,7 @@ function sendOrderToGoogleSheet(order) {
 
   fetch(API_URL, {
     method: "POST",
-    body: formData   // ⭐ 用 formData，不用 headers，不用 JSON
+    body: formData   // 用 formData，不用 headers，不用 JSON
   })
   .then(res => res.text())
   .then(msg => console.log("成功送出：", msg))
